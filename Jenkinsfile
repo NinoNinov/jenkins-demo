@@ -3,22 +3,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/NinoNinov/jenkins-demo.git'
+                git 'https://github.com/NinoNinov/jenkins-demo.git'
             }
         }
-        stage('Build') {
+        stage('Build Container') {
             steps {
-                echo 'Building the project...'
+                echo 'Building Docker image...'
+                sh 'docker build -t myapp:latest .'
             }
         }
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                echo 'Running tests inside container...'
+                sh 'docker run --rm myapp:latest pytest'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
+                echo 'Skipping deployment'
             }
         }
     }
